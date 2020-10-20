@@ -2,6 +2,51 @@
 
 priority -50
 
+# test table snippet
+snippet tt "test table"
+	for _, tt := range []struct{
+				name string
+				input string
+				want int
+		}{
+				{
+					name: $1,
+					input $2
+					want: $3,
+				},
+		}{
+			t.Run(testcase.name, func(t *testing.T) {
+			got := $0(tt.input)
+
+			if got != testcase.want{
+					t.Errorf("$0(%+v): \n\tgot: '%+v'\n\twant: '%+v'", tt.input, got, tt.want)
+			}
+		})
+	}
+}
+endsnippet
+
+# object diff in tests
+snippet diff
+if diff := cmp.Diff(tt.want, got); diff != "" {
+	t.Errorf("$0() mismatch (-want +got):\n%s", diff)
+}
+endsnippet
+
+snippet errcmp
+// https://github.com/google/go-cmp/issues/24
+errorCmp := func(x, y error) bool {
+	if x == nil || y == nil {
+		return x == nil && y == nil
+	}
+	return x.Error() == y.Error()
+}
+
+if ok := errorCmp(gotErr, tt.want.err); !ok {
+	t.Errorf("$1() \n\tgotErr: '%+v'\n\twantErr: '%+v'", gotErr, tt.want.err)
+}
+endsnippet
+
 # when to abbriviate and when not?
 # b doesn't work here, because it ignores whitespace
 # optional local name?
