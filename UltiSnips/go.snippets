@@ -15,10 +15,10 @@ snippet tt "test table"
 					want: $3,
 				},
 		}{
-			t.Run(testcase.name, func(t *testing.T) {
+			t.Run(tt.name, func(t *testing.T) {
 			got := $0(tt.input)
 
-			if got != testcase.want{
+			if got != tt.want{
 					t.Errorf("$0(%+v): \n\tgot: '%+v'\n\twant: '%+v'", tt.input, got, tt.want)
 			}
 		})
@@ -39,11 +39,11 @@ errorCmp := func(x, y error) bool {
 	if x == nil || y == nil {
 		return x == nil && y == nil
 	}
-	return x.Error() == y.Error()
+	return x == y
 }
 
-if ok := errorCmp(gotErr, tt.want.err); !ok {
-	t.Errorf("$1() \n\tgotErr: '%+v'\n\twantErr: '%+v'", gotErr, tt.want.err)
+if ok := errorCmp(gotErr, tt.wantErr); !ok {
+	t.Errorf("$0() \n\twantErr: '%+v'\n\tgotErr: '%+v'", wantErr, tt.wantErr)
 }
 endsnippet
 
