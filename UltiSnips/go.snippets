@@ -33,6 +33,11 @@ if diff := cmp.Diff(tt.want, got); diff != "" {
 }
 endsnippet
 
+snippet asserterr
+assertErr := func(x error, b bool) bool {
+	return (x == nil && b == false) || (x != nil && b == true)
+}
+
 snippet errcmp
 // https://github.com/google/go-cmp/issues/24
 errorCmp := func(x, y error) bool {
@@ -43,7 +48,7 @@ errorCmp := func(x, y error) bool {
 }
 
 if ok := errorCmp(gotErr, tt.wantErr); !ok {
-	t.Errorf("$0() \n\twantErr: '%+v'\n\tgotErr: '%+v'", wantErr, tt.wantErr)
+	t.Errorf("$0() \n\twantErr: '%+v'\n\tgotErr: '%+v'", tt.wantErr, gotErr)
 }
 endsnippet
 
